@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1571840863 source:z:\2019\tecnico\4° semestre\02-topico em orientacao a objetos\04-projetos\projeto i\compactador\main.c
+	<stdio.h>
+	<stdlib.h>
+
