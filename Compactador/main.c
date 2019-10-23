@@ -59,6 +59,7 @@ typedef struct NoFila
                 }
             }
         }
+            printf(inicio->dado->letra);
     }
 
     void main()
@@ -127,8 +128,6 @@ typedef struct NoFila
         char letrasNoArquivo[strlen(textoArquivo)];
         printf(textoArquivo);
 
-        scanf("%s", nomeArquivo);
-
 
         NoFila *aux = inicio;
         while(aux != NULL)
@@ -136,6 +135,8 @@ typedef struct NoFila
             printf(aux->dado->letra);
             aux = aux->prox;
         }
+
+        scanf("%s", nomeArquivo);
 
     }
 
