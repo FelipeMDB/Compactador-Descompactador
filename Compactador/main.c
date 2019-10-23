@@ -59,7 +59,6 @@ typedef struct NoFila
                 }
             }
         }
-            printf(inicio->dado->letra);
     }
 
     void main()
