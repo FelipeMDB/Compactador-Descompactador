@@ -95,7 +95,7 @@ typedef struct NoFila
         for(int i = 0; i < tamanhoArquivo; i++)
             foiPercorrido[i] = 0;
 
-        NoFila *inicio;
+        NoFila *inicio = NULL;
 
         for(int i = 0; i < tamanhoArquivo; i++)
         {
@@ -128,6 +128,14 @@ typedef struct NoFila
         printf(textoArquivo);
 
         scanf("%s", nomeArquivo);
+
+
+        NoFila *aux = inicio;
+        while(aux != NULL)
+        {
+            printf(aux->dado->letra);
+            aux = aux->prox;
+        }
 
     }
 
