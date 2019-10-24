@@ -19,45 +19,55 @@ typedef struct NoFila
 
     }
 
-    void inserirNaFila(NoFila *novoNo, NoFila *inicio)
+    void inserirNaFila(NoArvore *novoNo, NoFila *inicio)
     {
-        if(inicio == NULL)
+        NoArvore* novo = (NoArvore*)malloc(sizeof(NoArvore));
+        novo->dir = novoNo->dir;
+        novo->esq = novoNo->esq;
+        novo->letra = novoNo->letra;
+        novo->quantidade = novoNo->quantidade;
+
+        NoFila *novoNoFila;
+        novoNoFila = (NoFila*)malloc(sizeof(NoFila));
+        novoNoFila->dado = novoNo;
+        novoNoFila->prox = NULL;
+        if(inicio->dado == NULL)
         {
-            inicio = novoNo;
+            inicio->dado = novo;
         }
         else
         {
 
-            if((*(*inicio).dado).quantidade >= ((*(*novoNo).dado).quantidade))
+            /*if((*(*inicio).dado).quantidade >= ((*(*novoNoFila).dado).quantidade))
             {
                 NoFila *noAuxiliar = inicio;
-                inicio = novoNo;
-                novoNo->prox = noAuxiliar;
+                inicio = novoNoFila;
+                novoNoFila->prox = noAuxiliar;
             }
             else
-            {
+            {*/
                 NoFila *noAtual = inicio;
                 char achou = 0;
                 while(achou == 0)
                 {
-                    if((noAtual->dado)->quantidade <= (novoNo->dado)->quantidade)
+                    if((noAtual->dado)->quantidade <= (novoNoFila->dado)->quantidade)
                     {
                         if(noAtual->prox == NULL)
                         {
                             achou = 1;
-                            noAtual->prox = novoNo;
+                            noAtual->prox = novoNoFila;
                         }
-                        else if(noAtual->prox->dado->quantidade > novoNo->dado->quantidade)
+                        else if(noAtual->prox->dado->quantidade > novoNoFila->dado->quantidade)
                         {
                             achou = 1;
                             NoFila *noAuxiliar = noAtual->prox;
-                            noAtual->prox = novoNo;
-                            novoNo->prox = noAuxiliar;
+                            noAtual->prox = novoNoFila;
+                            novoNoFila->prox = noAuxiliar;
                         }
                     }
                     noAtual = noAtual->prox;
                 }
-            }
+            //}
         }
     }
 
@@ -95,16 +105,18 @@ typedef struct NoFila
         for(int i = 0; i < tamanhoArquivo; i++)
             foiPercorrido[i] = 0;
 
-        NoFila *inicio = NULL;
-
+        NoFila *inicio = (NoFila*)malloc(sizeof(NoFila));
+        inicio->dado = NULL;
+        inicio->prox = NULL;
         for(int i = 0; i < tamanhoArquivo; i++)
         {
             char letraAtual = textoArquivo[i];
-            if(foiPercorrido[i] == 0)
-            {
+
                 NoArvore *novoNo;
                 novoNo = (NoArvore*)malloc(sizeof(NoArvore));
-                (*novoNo).letra = letra;
+            if(foiPercorrido[i] == 0)
+            {
+                (*novoNo).letra = (unsigned char)letraAtual;
                 (*novoNo).quantidade = 0;
                 for(int l=0; l<tamanhoArquivo; l++)
                 {
@@ -114,9 +126,7 @@ typedef struct NoFila
                         (*novoNo).quantidade++;
                     }
                 }
-                NoFila *novoNoFila;
-                novoNoFila = (NoFila*)malloc(sizeof(NoFila));
-                inserirNaFila(novoNoFila, inicio);
+                inserirNaFila(novoNo, inicio);
             }
         }
 
