@@ -21,31 +21,32 @@ typedef struct NoFila
 
     void inserirNaFila(NoArvore *novoNo, NoFila *inicio)
     {
-        NoArvore* novo = (NoArvore*)malloc(sizeof(NoArvore));
+        /*NoArvore* novo = (NoArvore*)malloc(sizeof(NoArvore));
         novo->dir = novoNo->dir;
         novo->esq = novoNo->esq;
         novo->letra = novoNo->letra;
-        novo->quantidade = novoNo->quantidade;
+        novo->quantidade = novoNo->quantidade;*/
 
         NoFila *novoNoFila;
         novoNoFila = (NoFila*)malloc(sizeof(NoFila));
         novoNoFila->dado = novoNo;
         novoNoFila->prox = NULL;
+
         if(inicio->dado == NULL)
         {
-            inicio->dado = novo;
+            inicio->dado = novoNo;
         }
         else
         {
 
-            /*if((*(*inicio).dado).quantidade >= ((*(*novoNoFila).dado).quantidade))
+            if((*(*inicio).dado).quantidade >= ((*(*novoNoFila).dado).quantidade))
             {
                 NoFila *noAuxiliar = inicio;
                 inicio = novoNoFila;
                 novoNoFila->prox = noAuxiliar;
             }
             else
-            {*/
+            {
                 NoFila *noAtual = inicio;
                 char achou = 0;
                 while(achou == 0)
@@ -67,7 +68,7 @@ typedef struct NoFila
                     }
                     noAtual = noAtual->prox;
                 }
-            //}
+            }
         }
     }
 
@@ -91,7 +92,7 @@ typedef struct NoFila
         letra = fgetc(arquivo);
         while (letra != EOF)
         {
-            //printf ("%c", letra);
+            /*printf ("%c", letra);*/
             letra = fgetc(arquivo);
             tamanhoArquivo++;
         }
@@ -102,13 +103,14 @@ typedef struct NoFila
 
 
         char foiPercorrido[tamanhoArquivo];
-        for(int i = 0; i < tamanhoArquivo; i++)
+        int i;
+        for(i = 0; i < tamanhoArquivo; i++)
             foiPercorrido[i] = 0;
 
         NoFila *inicio = (NoFila*)malloc(sizeof(NoFila));
         inicio->dado = NULL;
         inicio->prox = NULL;
-        for(int i = 0; i < tamanhoArquivo; i++)
+        for(i = 0; i < tamanhoArquivo; i++)
         {
             char letraAtual = textoArquivo[i];
 
@@ -118,7 +120,8 @@ typedef struct NoFila
             {
                 (*novoNo).letra = (unsigned char)letraAtual;
                 (*novoNo).quantidade = 0;
-                for(int l=0; l<tamanhoArquivo; l++)
+                int l;
+                for(l=0; l<tamanhoArquivo; l++)
                 {
                     if(textoArquivo[l] == letraAtual)
                     {
@@ -141,7 +144,7 @@ typedef struct NoFila
         NoFila *aux = inicio;
         while(aux != NULL)
         {
-            printf(aux->dado->letra);
+            printf("%s, %d", &(aux->dado->letra), &(aux->dado->quantidade));
             aux = aux->prox;
         }
 
