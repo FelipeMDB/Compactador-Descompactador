@@ -1,0 +1,111 @@
+Algorítmo de Huffman
+	- aplicação de árvores binárias e de filas de prioridade.
+	- método para construção de códigos mínimos.
+	- é uma codificação estatística, o código dos caracteres tem a ver com a frequência que aparecem no texto.
+		- habitualmente, todos os caracteres são alocados com o mesmo tamanho (8 bits)
+		-'chars' ocupam um byte, não importando qual é a letra
+		- fabricar códigos de acordo com a frequência de caracteres.
+		- o comprimento do código não será mais fixo
+
+
+
+
+
+	como fazer?
+		- percorre o texto que vai ser compactado e percorremos a frequência de todos os caracteres.		
+			- quantas vezes aparecem?.
+			- priorizar de acordo com o número de ocorrências..
+				- quem aparece menos, mais prioritário
+
+		- constrói-se uma árvore e a percorre para determinar todos os códigos.
+			- a árvore diz o código de cada byte.
+		- percorre o arquivo texto e cria-se um novo arquivo usando os códigos de Huffman.
+
+
+
+
+
+Exemplo:
+
+
+	"Eerie eyes seen near lake"
+
+
+	- quais caracteres estão presentes neste texto?(lembre-se da pontuação e espaços).
+	- qual a frequência?
+		- E - 1
+		- e - 8
+		- r - 2
+		etc...
+
+	1 - agora criamos nozinhos de árvore binária, um monte de nozinhos isolados.
+		- dentro vai ter caracter e frequência.
+	2 - coloca-se os nós numa fila de prioridade .
+		- QUANTO MENOR A OCORRÊNCIA, MAIOR A PRIORIDADE.
+	
+
+
+	typedef struct HuffNode
+	{
+		char myChar;
+		int myFrequency;
+			struct HuffNode *myLeft, *myRight;
+		HuffNode;
+	}
+	Priority myFrequency;
+
+
+
+
+	3 - enquanto a fila de prioridades contiver dois ou mais nozinhos:
+		1 - cria um novo nó
+		2 - desenfileira um nó e transforma-o em sub arvore ESQUERDA do novo nó (dequeue).
+		3 - desenfileira um nó e transforma-o em sub arvore DIREITA do novo nó (dequeue).
+		4 - somar valores da quantidade de nós ao nó principal (raiz).
+			- indicar que não há char no nó principal.
+		5 - Inserir essa sub arvore em uma fila de prioridade.
+		6 - Após juntar todas as sub-árvores, a árvore está completa, sót sobrando um nó na fila de prioridades.
+		7 - desenfilera o nó.
+			- a árvore contém o código para todos esses caracteres
+		8 - Agora fazemos um percurso para obter o código de cada letrinha.
+		9 - Indo pra esquerda, significará um '0' ir pra direita, significará '1'
+	       10 - exemplo:
+			- o 'E' terá código 0000, pois para chegar até ele passamos 4 vezes por ponteiros para a esquerda.
+			- fácil de enxergar na apostila do maligno.
+
+
+
+	4 - Escrevendo um arquivo texto - compactação
+		- Escreve de acordo com o que aparece:
+			- apareceu um 'E', pega o código dele, aparece um 'i', escreve o código dele, e assim por diante.
+		- temos que acumular bits até ter 8 para formar um byte.
+		- se quebrar o código no meio, não tem problema é assim mesmo.
+		- pode acontecer de no final não sobrar um byte, só 3 bits
+			- daí tem que completar com 5 bits de lixo
+			- COLOCA NO INÍCIO DO ARQUIVO QUANTOS BITS DE LIXO TEM SE VIRA CRIATURA
+
+
+
+	5 - Descompactação
+		1 - Possuindo a árvore original, exemplo : 0110
+			- 0, vai para a esquerda; 1, vai para a direita; 1, vai para a direita; 0, vai para a esquerda; achou uma folha, ta aí sua letra.
+
+
+	6 - GUARDA A FILA DE PRIORIDADE NO ARQUIVO/ TABELA DE FREQUÊNCIAS
+
+
+
+
+
+
+
+
+
+
+
+
+____________________________________________________________________________________________________________________________________________________________________
+Filas de Prioridade 
+
+- possuem dados com prioridade.
+- não se entra sempre no fim da fila, entra de acordo com a prioridade do dado.
