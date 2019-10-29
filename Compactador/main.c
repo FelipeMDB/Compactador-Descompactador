@@ -29,7 +29,8 @@ typedef struct NoFila
 
         NoFila *novoNoFila;
         novoNoFila = (NoFila*)malloc(sizeof(NoFila));
-        novoNoFila->dado = novoNo;
+        novoNoFila->dado = (NoArvore*)malloc(sizeof(NoArvore));
+        *(novoNoFila->dado) = *novoNo;
         novoNoFila->prox = NULL;
 
         if(inicio->dado == NULL)
@@ -41,13 +42,14 @@ typedef struct NoFila
 
             if((*(*inicio).dado).quantidade >= ((*(*novoNoFila).dado).quantidade))
             {
-                NoFila *noAuxiliar = inicio;
-                inicio = novoNoFila;
-                novoNoFila->prox = noAuxiliar;
+                NoFila noAuxiliar = *inicio;                    /*um nó fila recebe o conteúdo do ponteiro inicio*/
+                *inicio = *novoNoFila;                          /*o conteudo do inicio passa a ser o que é novoNoFila*/
+                inicio->prox = (NoFila*)malloc(sizeof(NoFila));  /*o prox de inicio recebe um malloc*/
+                *(inicio->prox) = noAuxiliar;                      /*o conteudo do prox de inicio recebe o noAuxiliar*/
             }
             else
             {
-                NoFila *noAtual = inicio;
+                NoFila *noAtual = inicio;  /*Ponteiro que caminha pela fila*/
                 char achou = 0;
                 while(achou == 0)
                 {
@@ -56,14 +58,17 @@ typedef struct NoFila
                         if(noAtual->prox == NULL)
                         {
                             achou = 1;
-                            noAtual->prox = novoNoFila;
+                            noAtual->prox = (NoFila*)malloc(sizeof(NoFila)); /*Ponteiro próximo de noAtual é alocado na memória*/
+                            *(noAtual->prox) = *novoNoFila;                     /*Conteúdo do ponteiro passa a ser o novo nó fila*/
                         }
                         else if(noAtual->prox->dado->quantidade > novoNoFila->dado->quantidade)
                         {
                             achou = 1;
-                            NoFila *noAuxiliar = noAtual->prox;
-                            noAtual->prox = novoNoFila;
-                            novoNoFila->prox = noAuxiliar;
+                            NoFila noAuxiliar = *(noAtual->prox); /*noAuxiliar recebe conteudo de prox de noAtual*/
+                            noAtual->prox = novoNoFila;        /*conteudo de prox passa a ser novoNoFila*/
+
+                            novoNoFila->prox = (NoFila*)malloc(sizeof(NoFila)); /*aloca prox de novoNoFila*/
+                            *(novoNoFila)->prox = noAuxiliar;     /*guarda noAuxiliar no prox*/
                         }
                     }
                     noAtual = noAtual->prox;
