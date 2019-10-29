@@ -16,8 +16,32 @@ typedef struct NoFila
 } NoFila;
 
 
-void inserirNaArvore(NoArvore *novoNo, NoArvore *raiz)
+/*void inserirNaArvore(NoArvore *novoNo, NoArvore *raiz)
 {
+
+}*/
+
+
+void juntarNos(NoFila *noUm, NoFila *noDois)
+{
+    NoArvore *novoNoArvore;
+    novoNoArvore = (NoArvore*)malloc(sizeof(NoArvore));
+    novoNoArvore->letra = NULL;
+    novoNoArvore->quantidade = noUm->dado->quantidade+noDois->dado->quantidade;
+    NoArvore *noAuxiliar = (NoArvore*)malloc(sizeof(NoArvore));
+    NoArvore *outroNoAuxiliar = (NoArvore*)malloc(sizeof(NoArvore));
+    noAuxiliar = noUm->dado;
+    outroNoAuxiliar = noDois->dado;
+    if(noAuxiliar->quantidade < outroNoAuxiliar->quantidade)
+    {
+        novoNoArvore->esq = noAuxiliar;
+        novoNoArvore->dir = outroNoAuxiliar;
+    }
+    else
+    {
+        novoNoArvore->esq = outroNoAuxiliar;
+        novoNoArvore->dir = noAuxiliar;
+    }
 
 }
 
@@ -125,6 +149,8 @@ int main()
         }
     }
 
+
+    /*convertendo a fila em árvore*/
 
 
     /*teste de ordem da fila*/
