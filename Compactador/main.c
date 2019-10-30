@@ -2,6 +2,7 @@
     #include <stdlib.h>
 typedef struct NoArvore
 {
+    char temValor;
     unsigned char letra;
     int quantidade;
     struct NoArvore *esq;
@@ -21,22 +22,22 @@ typedef struct NoFila
 
 }*/
 
-*NoArvore juntarNos(NoArvore *noUm, NoArvore *noDois)
+NoArvore* juntarNos(NoArvore *noUm, NoArvore *noDois)
 {
     NoArvore *raiz = (NoArvore*)malloc(sizeof(NoArvore));
-    raiz->letra = NULL;
-    raiz->quantidade = noUm->quantidade+noDois->quantidade;
-
+    raiz->quantidade = (noUm->quantidade)+(noDois->quantidade);
+    raiz->temValor = 0;
     raiz->esq = noUm;
     raiz->dir = noDois;
 
     return raiz;
 }
 
-*NoFila desenfileirar(NoFila *inicio)
+NoFila* desenfileirar(NoFila *inicio)
 {
     NoFila *noAuxiliar = (NoFila*)malloc(sizeof(NoFila));
     *noAuxiliar = *inicio;
+    noAuxiliar->prox = NULL;
     *inicio = *(inicio->prox);
     return noAuxiliar;
 }
@@ -139,22 +140,12 @@ int main()
 
             novoNo->letra = i;
             novoNo->quantidade = quantidade[i];
+            novoNo->temValor = 1;
             inserirNaFila(novoNo, inicio);
         }
     }
 
 
-
-    /*convertendo a fila em árvore*/
-
-
-
-    while(*inicio->prox != NULL)
-    {
-        NoFila *esq = desenfileirar(inicio);
-        NoFila *dir = desenfileirar(inicio);
-        inserirNaFila(juntarNos(esq->dado, dir->dado));
-    }
 
     /*teste de ordem da fila*/
 
@@ -165,14 +156,40 @@ int main()
         aux = aux->prox;
     }
 
-     NoArvore *auxi = inicio;
-     NoArvore *auxi2 = NULL;
-    while(aux != NULL)
+
+    /*convertendo a fila em árvore*/
+
+
+
+    while(inicio->prox!= NULL)
     {
-        printf("\n%c, %d", (unsigned char)(auxi->dado)->letra, (int)(auxi->dado)->quantidade);
+        if(inicio->prox->prox == NULL)
+        {
+            NoFila *esq = desenfileirar(inicio);
+            inserirNaFila(juntarNos(esq, inicio), inicio);
+            desenfileirar(inicio);
+        }
+        else
+        {
+            NoFila *esq = desenfileirar(inicio);
+            NoFila *dir = desenfileirar(inicio);
+            inserirNaFila(juntarNos(esq->dado, dir->dado), inicio);
+        }
+    }
+
+
+     printf("\n-------------------------------------------------------------------------------------------------------------------");
+     NoArvore *auxi = inicio->dado;
+     NoArvore *auxi2 = inicio->dado;
+
+    while(auxi != NULL && auxi2!= NULL)
+    {
+        if(auxi->temValor == 1)
+            printf("\n%c, %d", (unsigned char) auxi->letra, (int)auxi->quantidade);
         auxi = auxi->dir;
+        if(auxi2->temValor == 1)
+            printf("\n%c, %d", (unsigned char)auxi2->letra, (int)auxi2->quantidade);
         auxi2 = auxi2->esq;
-        printf("\n%c, %d", (unsigned char)(auxi2->dado)->letra, (int)(auxi2->dado)->quantidade);
     }
 
     return 0;
