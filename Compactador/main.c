@@ -22,26 +22,52 @@ typedef struct NoFila
 }*/
 
 
-void juntarNos(NoFila *noUm, NoFila *noDois)
+*NoArvore juntarNos(NoFila *noUm, NoFila *noDois, NoArvore raiz)
 {
-    NoArvore *novoNoArvore;
-    novoNoArvore = (NoArvore*)malloc(sizeof(NoArvore));
-    novoNoArvore->letra = NULL;
-    novoNoArvore->quantidade = noUm->dado->quantidade+noDois->dado->quantidade;
-    NoArvore *noAuxiliar = (NoArvore*)malloc(sizeof(NoArvore));
-    NoArvore *outroNoAuxiliar = (NoArvore*)malloc(sizeof(NoArvore));
-    noAuxiliar = noUm->dado;
-    outroNoAuxiliar = noDois->dado;
-    if(noAuxiliar->quantidade < outroNoAuxiliar->quantidade)
+    NoArvore *posicaoFinalNaArvore;
+    if(raiz->dado == NULL)
     {
-        novoNoArvore->esq = noAuxiliar;
-        novoNoArvore->dir = outroNoAuxiliar;
+        raiz->quantidade = noUm->dado->quantidade + noDois->dado->quantidade;
+        if(noAuxiliar->quantidade < outroNoAuxiliar->quantidade)
+        {
+            raiz->esq = noAuxiliar;
+            raiz->dir = outroNoAuxiliar;
+        }
+        else
+        {
+            raiz->esq = outroNoAuxiliar;
+            raiz->dir = noAuxiliar;
+        }
+        posicaoFinalNaArvore = raiz;
     }
     else
     {
-        novoNoArvore->esq = outroNoAuxiliar;
-        novoNoArvore->dir = noAuxiliar;
+        NoArvore *novoNoArvore;
+        novoNoArvore = (NoArvore*)malloc(sizeof(NoArvore));
+        novoNoArvore->letra = NULL;
+        novoNoArvore->quantidade = noUm->dado->quantidade+noDois->dado->quantidade;
+        NoArvore *noAuxiliar = (NoArvore*)malloc(sizeof(NoArvore));
+        NoArvore *outroNoAuxiliar = (NoArvore*)malloc(sizeof(NoArvore));
+        noAuxiliar = noUm->dado;
+        outroNoAuxiliar = noDois->dado;
+        if(noAuxiliar->quantidade < outroNoAuxiliar->quantidade)
+        {
+            novoNoArvore->esq = noAuxiliar;
+            novoNoArvore->dir = outroNoAuxiliar;
+        }
+        else
+        {
+            novoNoArvore->esq = outroNoAuxiliar;
+            novoNoArvore->dir = noAuxiliar;
+        }
+        if(raiz->quantidade < novoNoArvore->quantidade)
+        {
+            raiz->esq = novoNoArvore
+        }
+        posicaoFinalNaArvore = novoNoArvore;
     }
+
+    return posicaoFinalNaArvore;
 
 }
 
@@ -150,8 +176,17 @@ int main()
     }
 
 
+
     /*convertendo a fila em árvore*/
 
+
+    NoArvore raiz;
+    NoFila *auxiliar = inicio;
+    while(*auxiliar->prox != NULL)
+    {
+        raiz = juntarNos(auxiliar, prox, raiz);
+
+    }
 
     /*teste de ordem da fila*/
 
@@ -162,5 +197,17 @@ int main()
         aux = aux->prox;
     }
 
+     NoArvore *auxi = inicio;
+     NoArvore *auxi2 = NULL;
+    while(aux != NULL)
+    {
+        printf("\n%c, %d", (unsigned char)(auxi->dado)->letra, (int)(auxi->dado)->quantidade);
+        auxi = auxi->dir;
+        auxi2 = auxi2->esq;
+        printf("\n%c, %d", (unsigned char)(auxi2->dado)->letra, (int)(auxi2->dado)->quantidade);
+    }
+
     return 0;
+
+
 }
