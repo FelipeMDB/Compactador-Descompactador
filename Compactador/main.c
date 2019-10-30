@@ -25,7 +25,7 @@ typedef struct NoFila
 {
     NoArvore *raiz = (NoArvore*)malloc(sizeof(NoArvore));
     raiz->letra = NULL;
-    raiz->quantidade = noUm->dado->quantidade+noDois->dado->quantidade;
+    raiz->quantidade = noUm->quantidade+noDois->quantidade;
 
     raiz->esq = noUm;
     raiz->dir = noDois;
@@ -73,7 +73,6 @@ void inserirNaFila(NoArvore *novoNo, NoFila *inicio)
                     if(noAtual->prox == NULL)
                     {
                         achou = 1;
-                        /*noAtual->prox = (NoFila*)malloc(sizeof(NoFila)); /*Ponteiro próximo de noAtual é alocado na memória*/
                         noAtual->prox = novoNoFila;                     /*Conteúdo do ponteiro passa a ser o novo nó fila*/
                     }
                     else if(((noAtual->prox)->dado)->quantidade > (novoNoFila->dado)->quantidade)
