@@ -21,56 +21,25 @@ typedef struct NoFila
 
 }*/
 
-
-*NoArvore juntarNos(NoFila *noUm, NoFila *noDois, NoArvore raiz)
+*NoArvore juntarNos(NoArvore *noUm, NoArvore *noDois)
 {
-    NoArvore *posicaoFinalNaArvore;
-    if(raiz->dado == NULL)
-    {
-        raiz->quantidade = noUm->dado->quantidade + noDois->dado->quantidade;
-        if(noAuxiliar->quantidade < outroNoAuxiliar->quantidade)
-        {
-            raiz->esq = noAuxiliar;
-            raiz->dir = outroNoAuxiliar;
-        }
-        else
-        {
-            raiz->esq = outroNoAuxiliar;
-            raiz->dir = noAuxiliar;
-        }
-        posicaoFinalNaArvore = raiz;
-    }
-    else
-    {
-        NoArvore *novoNoArvore;
-        novoNoArvore = (NoArvore*)malloc(sizeof(NoArvore));
-        novoNoArvore->letra = NULL;
-        novoNoArvore->quantidade = noUm->dado->quantidade+noDois->dado->quantidade;
-        NoArvore *noAuxiliar = (NoArvore*)malloc(sizeof(NoArvore));
-        NoArvore *outroNoAuxiliar = (NoArvore*)malloc(sizeof(NoArvore));
-        noAuxiliar = noUm->dado;
-        outroNoAuxiliar = noDois->dado;
-        if(noAuxiliar->quantidade < outroNoAuxiliar->quantidade)
-        {
-            novoNoArvore->esq = noAuxiliar;
-            novoNoArvore->dir = outroNoAuxiliar;
-        }
-        else
-        {
-            novoNoArvore->esq = outroNoAuxiliar;
-            novoNoArvore->dir = noAuxiliar;
-        }
-        if(raiz->quantidade < novoNoArvore->quantidade)
-        {
-            raiz->esq = novoNoArvore
-        }
-        posicaoFinalNaArvore = novoNoArvore;
-    }
+    NoArvore *raiz = (NoArvore*)malloc(sizeof(NoArvore));
+    raiz->letra = NULL;
+    raiz->quantidade = noUm->dado->quantidade+noDois->dado->quantidade;
 
-    return posicaoFinalNaArvore;
+    raiz->esq = noUm;
+    raiz->dir = noDois;
 
+    return raiz;
 }
 
+*NoFila desenfileirar(NoFila *inicio)
+{
+    NoFila *noAuxiliar = (NoFila*)malloc(sizeof(NoFila));
+    *noAuxiliar = *inicio;
+    *inicio = *(inicio->prox);
+    return noAuxiliar;
+}
 
 void inserirNaFila(NoArvore *novoNo, NoFila *inicio)
 {
@@ -180,12 +149,12 @@ int main()
     /*convertendo a fila em árvore*/
 
 
-    NoArvore raiz;
-    NoFila *auxiliar = inicio;
-    while(*auxiliar->prox != NULL)
-    {
-        raiz = juntarNos(auxiliar, prox, raiz);
 
+    while(*inicio->prox != NULL)
+    {
+        NoFila *esq = desenfileirar(inicio);
+        NoFila *dir = desenfileirar(inicio);
+        inserirNaFila(juntarNos(esq->dado, dir->dado));
     }
 
     /*teste de ordem da fila*/
