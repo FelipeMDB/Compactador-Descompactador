@@ -16,6 +16,12 @@ typedef struct NoFila
     struct NoFila *prox;
 } NoFila;
 
+typedef struct
+{
+    char codigo[8];
+    char qtosBytes;
+}CodLetra;
+
 
 /*void inserirNaArvore(NoArvore *novoNo, NoArvore *raiz)
 {
@@ -92,23 +98,22 @@ void inserirNaFila(NoArvore *novoNo, NoFila *inicio)
     }
 }
 
+CodLetra codigosLetras[255];
 
-char codigo[8];
-posicaoNoCodigo = 0;
-
-char codificarLetra(NoArvore* atual, char letra)
+void codificarLetras(NoArvore* atual, char cod, char indice, char codigo[])
 {
-    if(atual->esq != NULL)
+    codigo[indice] = cod;
+    if(atual->temValor == 0)
     {
-        codigo[posicaoNoCodigo] = 0;
-        posicaoNoCodigo++;
+        codificarLetras(atual->esq, 0, indice+1, codigo);
+        codificarLetras(atual->dir, 1, indice+1, codigo);
     }
-    else if(atual->letra == letra)
+    else
     {
-        codigo[posicaoNoCodigo] = 1
-        posicaoNoCodigo++;s
+        int i;
+        for(i=0; i<=indice; i++)
+            codigosLetras[atual->letra].codigo[i] = codigo[i];
     }
-
 }
 
 int main()
@@ -116,58 +121,61 @@ int main()
     /*Leitura de arquivo*/
     FILE *arquivo;
     char nomeArquivo[25];
-    char letra;
     FILE *arquivoCodificado;
     char nomeNovoArquivo[25];
-    int filaPrioridade[255];
     NoFila *inicio;
     NoFila *aux;
     int i;
-    int quantidade[255];
-
-    printf("Digite o nome do arquivo\n");
-    scanf("%s", nomeArquivo);
-    arquivo = fopen(nomeArquivo, "rb");
-
-    if(arquivo == NULL)
-    {
-        printf("Não foi possivel abrir o arquivo\n");
-        exit(0);
-    }
-
-
-    for(i = 0; i < 255; i++)
-        quantidade[i] = 0;
-
-    letra = fgetc(arquivo);
-    while (letra != EOF)
-    {
-        quantidade[letra] = quantidade[letra] + 1;
-        letra = fgetc(arquivo);
-    }
-
-
     /*criação da fila de priorjdades*/
     inicio = (NoFila*)malloc(sizeof(NoFila));
     inicio->dado = NULL;
     inicio->prox = NULL;
     char quantidadeLetrasDiferentes = 0;
 
-    /*armazenamento das letras e suas respectivas quantidades na fila de prioridades*/
-    for(i = 0; i < 255; i++)
     {
-        if(quantidade[i] != 0)
-        {
-            NoArvore *novoNo;
-            novoNo = (NoArvore*)malloc(sizeof(NoArvore));
+        char letra;
+        int quantidade[255];
 
-            novoNo->letra = i;
-            novoNo->quantidade = quantidade[i];
-            novoNo->temValor = 1;
-            novoNo->esq = NULL;
-            novoNo->dir = NULL;
-            inserirNaFila(novoNo, inicio);
-            quantidadeLetrasDiferentes++;
+        printf("Digite o nome do arquivo\n");
+        scanf("%s", nomeArquivo);
+        arquivo = fopen(nomeArquivo, "rb");
+
+        if(arquivo == NULL)
+        {
+            printf("Não foi possivel abrir o arquivo\n");
+            exit(0);
+        }
+
+
+        for(i = 0; i < 255; i++)
+            quantidade[i] = 0;
+
+        letra = fgetc(arquivo);
+        while (letra != EOF)
+        {
+            quantidade[letra] = quantidade[letra] + 1;
+            letra = fgetc(arquivo);
+        }
+
+
+
+
+        /*armazenamento das letras e suas respectivas quantidades na fila de prioridades*/
+        for(i = 0; i < 255; i++)
+        {
+            if(quantidade[i] != 0)
+            {
+                NoArvore *novoNo;
+                novoNo = (NoArvore*)malloc(sizeof(NoArvore));
+
+                novoNo->letra = i;
+                novoNo->quantidade = quantidade[i];
+                novoNo->temValor = 1;
+                novoNo->esq = NULL;
+                novoNo->dir = NULL;
+                inserirNaFila(novoNo, inicio);
+                quantidadeLetrasDiferentes++;
+            }
         }
     }
 
@@ -212,8 +220,26 @@ int main()
             inserirNaFila(juntarNos(esq->dado, dir->dado), inicio);
         }
     }
+    /*char cod, char indice, char codigo[])*/
+
+    {
+        char codigo[8];
+        codificarLetras(inicio->dado->esq, 0, 0, codigo);
+        codificarLetras(inicio->dado->dir, 1, 0, codigo);
+    }
 
     rewind(arquivo);
+
+    char byte = 0;
+    char ondeParou = 0;
+    while(!(feof(arquivo)))
+    {
+        char letra = fgetc(arquivo);
+        if(codigosLetras[letra].qtosBytes < 8)
+        {
+
+        }
+    }
 
 
     fclose(arquivo);
