@@ -19,7 +19,7 @@ typedef struct NoFila
 typedef struct
 {
     char codigo[8];
-    char qtosBytes;
+    char qtosBits;
 }CodLetra;
 
 
@@ -230,14 +230,13 @@ int main()
 
     rewind(arquivo);
 
-    char byte = 0;
-    char ondeParou = 0;
-    while(!(feof(arquivo)))
+    while(!FEOF(arquivo))
     {
-        char letra = fgetc(arquivo);
-        if(codigosLetras[letra].qtosBytes < 8)
+        char let = fgetc(arquivo);
+        byte = codigosLetras[let].codigo;
+        for(i = 0; i < codigosLetras[let].qtosBits; i++)
         {
-
+            fprintf(arquivoCodificado, "%", byte[i]);
         }
     }
 
