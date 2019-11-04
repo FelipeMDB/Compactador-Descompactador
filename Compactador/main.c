@@ -16,6 +16,12 @@ typedef struct NoFila
     struct NoFila *prox;
 } NoFila;
 
+typedef struct
+{
+    char codigo[8];
+    char qtosBits;
+}CodLetra;
+
 
 /*void inserirNaArvore(NoArvore *novoNo, NoArvore *raiz)
 {
@@ -92,64 +98,89 @@ void inserirNaFila(NoArvore *novoNo, NoFila *inicio)
     }
 }
 
+CodLetra codigosLetras[255];
+
+void codificarLetras(NoArvore* atual, char cod, char indice, char codigo[])
+{
+    codigo[indice] = cod;
+    if(atual->temValor == 0)
+    {
+        codificarLetras(atual->esq, 0, indice+1, codigo);
+        codificarLetras(atual->dir, 1, indice+1, codigo);
+    }
+    else
+    {
+        int i;
+        for(i=0; i<=indice; i++)
+            codigosLetras[atual->letra].codigo[i] = codigo[i];
+    }
+}
+
 int main()
 {
     /*Leitura de arquivo*/
     FILE *arquivo;
     char nomeArquivo[25];
-    char letra;
-    int tamanhoArquivo = 0;
-
-    printf("Digite o nome do arquivo\n");
-    scanf("%s", nomeArquivo);
-    arquivo = fopen(nomeArquivo, "rb");
-
-    if(arquivo == NULL)
-    {
-        printf("Não foi possivel abrir o arquivo\n");
-        exit(0);
-    }
-
-
-    int quantidade[255];
+    FILE *arquivoCodificado;
+    char nomeNovoArquivo[25];
+    NoFila *inicio;
+    NoFila *aux;
     int i;
-    for(i = 0; i < 255; i++)
-        quantidade[i] = 0;
-
-    letra = fgetc(arquivo);
-    while (letra != EOF)
-    {
-        quantidade[letra] = quantidade[letra] + 1;
-        letra = fgetc(arquivo);
-    }
-    fclose(arquivo);
-
-
     /*criação da fila de priorjdades*/
-    NoFila *inicio = (NoFila*)malloc(sizeof(NoFila));
+    inicio = (NoFila*)malloc(sizeof(NoFila));
     inicio->dado = NULL;
     inicio->prox = NULL;
+    char quantidadeLetrasDiferentes = 0;
 
-    /*armazenamento das letras e suas respectivas quantidades na fila de prioridades*/
-    for(i = 0; i < 255; i++)
     {
-        if(quantidade[i] != 0)
-        {
-            NoArvore *novoNo;
-            novoNo = (NoArvore*)malloc(sizeof(NoArvore));
+        char letra;
+        int quantidade[255];
 
-            novoNo->letra = i;
-            novoNo->quantidade = quantidade[i];
-            novoNo->temValor = 1;
-            inserirNaFila(novoNo, inicio);
+        printf("Digite o nome do arquivo\n");
+        scanf("%s", nomeArquivo);
+        arquivo = fopen(nomeArquivo, "rb");
+
+        if(arquivo == NULL)
+        {
+            printf("Não foi possivel abrir o arquivo\n");
+            exit(0);
+        }
+
+
+        for(i = 0; i < 255; i++)
+            quantidade[i] = 0;
+
+        letra = fgetc(arquivo);
+        while (letra != EOF)
+        {
+            quantidade[letra] = quantidade[letra] + 1;
+            letra = fgetc(arquivo);
+        }
+
+
+
+
+        /*armazenamento das letras e suas respectivas quantidades na fila de prioridades*/
+        for(i = 0; i < 255; i++)
+        {
+            if(quantidade[i] != 0)
+            {
+                NoArvore *novoNo;
+                novoNo = (NoArvore*)malloc(sizeof(NoArvore));
+
+                novoNo->letra = i;
+                novoNo->quantidade = quantidade[i];
+                novoNo->temValor = 1;
+                novoNo->esq = NULL;
+                novoNo->dir = NULL;
+                inserirNaFila(novoNo, inicio);
+                quantidadeLetrasDiferentes++;
+            }
         }
     }
 
-
-
     /*teste de ordem da fila*/
-
-    NoFila *aux = inicio;
+    aux = inicio;
     while(aux != NULL)
     {
         printf("\n%c, %d", (unsigned char)(aux->dado)->letra, (int)(aux->dado)->quantidade);
@@ -157,9 +188,22 @@ int main()
     }
 
 
+    /*Escrevendo fila de prioridades no arquivo codificado*/
+    printf("\nDigite o nome do novo arquivo: ");
+    scanf("%s", &nomeNovoArquivo);
+    arquivoCodificado = fopen(nomeNovoArquivo, "wb");
+    fputc(' ', arquivoCodificado);
+    fputc(quantidadeLetrasDiferentes, arquivoCodificado);
+
+    aux = inicio;
+    while(aux != NULL)
+    {
+        fputc(aux->dado->letra, arquivoCodificado);
+        fprintf(arquivoCodificado, "%d",aux->dado->quantidade);
+        aux = aux->prox;
+    }
+
     /*convertendo a fila em árvore*/
-
-
 
     while(inicio->prox!= NULL)
     {
@@ -176,21 +220,29 @@ int main()
             inserirNaFila(juntarNos(esq->dado, dir->dado), inicio);
         }
     }
+    /*char cod, char indice, char codigo[])*/
 
-
-     printf("\n-------------------------------------------------------------------------------------------------------------------");
-     NoArvore *auxi = inicio->dado;
-     NoArvore *auxi2 = inicio->dado;
-
-    while(auxi != NULL && auxi2!= NULL)
     {
-        if(auxi->temValor == 1)
-            printf("\n%c, %d", (unsigned char) auxi->letra, (int)auxi->quantidade);
-        auxi = auxi->dir;
-        if(auxi2->temValor == 1)
-            printf("\n%c, %d", (unsigned char)auxi2->letra, (int)auxi2->quantidade);
-        auxi2 = auxi2->esq;
+        char codigo[8];
+        codificarLetras(inicio->dado->esq, 0, 0, codigo);
+        codificarLetras(inicio->dado->dir, 1, 0, codigo);
     }
+
+    rewind(arquivo);
+
+    while(!FEOF(arquivo))
+    {
+        char let = fgetc(arquivo);
+        byte = codigosLetras[let].codigo;
+        for(i = 0; i < codigosLetras[let].qtosBits; i++)
+        {
+            fprintf(arquivoCodificado, "%", byte[i]);
+        }
+    }
+
+
+    fclose(arquivo);
+    fclose(arquivoCodificado);
 
     return 0;
 
