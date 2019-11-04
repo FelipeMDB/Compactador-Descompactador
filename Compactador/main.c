@@ -113,6 +113,7 @@ void codificarLetras(NoArvore* atual, char cod, char indice, char codigo[])
         int i;
         for(i=0; i<=indice; i++)
             codigosLetras[atual->letra].codigo[i] = codigo[i];
+        codigosLetras[atual->letra].qtosBits = indice+1;
     }
 }
 
@@ -230,14 +231,33 @@ int main()
 
     rewind(arquivo);
 
-    while(!FEOF(arquivo))
     {
-        char let = fgetc(arquivo);
-        byte = codigosLetras[let].codigo;
-        for(i = 0; i < codigosLetras[let].qtosBits; i++)
+        char bytesRestantes = 7;
+        char byteAtual = 0;
+        char letra = fgetc(arquivo);
+        while(letra != EOF)
         {
-            fprintf(arquivoCodificado, "%", byte[i]);
+            for(i = 0; i < codigosLetras[letra].qtosBits; i++)
+            {
+                char cod = codigosLetras[letra].codigo[i] << bytesRestantes;
+                byteAtual = byteAtual^cod;
+                bytesRestantes--;
+                if(bytesRestantes == -1)
+                {
+                    bytesRestantes = 7;
+                    fputc(byteAtual, arquivoCodificado);
+                    byteAtual = 0;
+                }
+            }
+            char letra = fgetc(arquivo);
         }
+
+        rewind(arquivoCodificado);
+
+        if(bytesRestantes != 7)
+            fputc(bytesRestantes+1, arquivoCodificado);
+        else
+            fputc(0, arquivoCodificado);
     }
 
 
