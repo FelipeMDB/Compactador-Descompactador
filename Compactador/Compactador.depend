@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1572879137 source:c:\users\u18200\documents\github\compactador-descompactador\compactador\main.c
+1572615026 source:c:\users\u18200\documents\github\compactador-descompactador\compactador\main.c
 	<stdio.h>
 	<stdlib.h>
 
@@ -10,10 +10,6 @@
 1572371044 source:c:\users\gabri\onedrive\documentos\github\compactador-descompactador\compactador\compactador.c
 
 1572396916 source:c:\users\usuario\documents\github\compactador-descompactador\compactador\main.c
-	<stdio.h>
-	<stdlib.h>
-
-1572887382 source:f:\compactador-descompactador\compactador\main.c
 	<stdio.h>
 	<stdlib.h>
 

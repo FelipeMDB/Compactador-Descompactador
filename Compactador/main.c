@@ -61,6 +61,7 @@ void inserirNaFila(NoArvore *novoNo, NoFila *inicio)
     }
     else
     {
+
         if((inicio->dado)->quantidade >= (novoNoFila->dado)->quantidade)
         {
             NoFila noAuxiliar = *inicio;                    /*um nó fila recebe o conteúdo do ponteiro inicio*/
@@ -112,7 +113,6 @@ void codificarLetras(NoArvore* atual, char cod, char indice, char codigo[])
         int i;
         for(i=0; i<=indice; i++)
             codigosLetras[atual->letra].codigo[i] = codigo[i];
-        codigosLetras[atual->letra].qtosBits = indice+1;
     }
 }
 
@@ -131,8 +131,6 @@ int main()
     inicio->dado = NULL;
     inicio->prox = NULL;
     char quantidadeLetrasDiferentes = 0;
-
-
 
     {
         char letra;
@@ -159,6 +157,9 @@ int main()
             letra = fgetc(arquivo);
         }
 
+
+
+
         /*armazenamento das letras e suas respectivas quantidades na fila de prioridades*/
         for(i = 0; i < 255; i++)
         {
@@ -168,7 +169,6 @@ int main()
                 novoNo = (NoArvore*)malloc(sizeof(NoArvore));
 
                 novoNo->letra = i;
-
                 novoNo->quantidade = quantidade[i];
                 novoNo->temValor = 1;
                 novoNo->esq = NULL;
@@ -178,7 +178,6 @@ int main()
             }
         }
     }
-
 
     /*teste de ordem da fila*/
     aux = inicio;
@@ -210,16 +209,9 @@ int main()
     {
         if(inicio->prox->prox == NULL)
         {
-            NoFila *dir = (NoFila*)malloc(sizeof(NoFila));
             NoFila *esq = desenfileirar(inicio);
-            *dir = *inicio;
-            dir->dado = (NoArvore*)malloc(sizeof(NoArvore));
-            *(dir->dado) = *(inicio->dado);
-            inicio->dado->temValor = 0;
-            inicio->dado->quantidade  = (dir->dado->quantidade) + (esq->dado->quantidade);
-            inicio->dado->esq = esq->dado;
-            inicio->dado->dir = dir->dado;
-            inicio->prox = NULL;
+            inserirNaFila(juntarNos(esq, inicio), inicio);
+            desenfileirar(inicio);
         }
         else
         {
@@ -228,6 +220,7 @@ int main()
             inserirNaFila(juntarNos(esq->dado, dir->dado), inicio);
         }
     }
+    /*char cod, char indice, char codigo[])*/
 
     {
         char codigo[8];
@@ -237,38 +230,14 @@ int main()
 
     rewind(arquivo);
 
-    for(i = 0; i<codigosLetras['o'].qtosBits; i++)
+    while(!FEOF(arquivo))
     {
-        printf("%d\n", codigosLetras['o'].codigo[i]);
-    }
-
-    {
-        char bytesRestantes = 7;
-        char byteAtual = 0;
-        char letra = fgetc(arquivo);
-        while(letra != EOF)
+        char let = fgetc(arquivo);
+        byte = codigosLetras[let].codigo;
+        for(i = 0; i < codigosLetras[let].qtosBits; i++)
         {
-            for(i = 0; i < codigosLetras[letra].qtosBits; i++)
-            {
-                char cod = codigosLetras[letra].codigo[i] << bytesRestantes;
-                byteAtual = byteAtual^cod;
-                bytesRestantes--;
-                if(bytesRestantes == -1)
-                {
-                    bytesRestantes = 7;
-                    fputc(byteAtual, arquivoCodificado);
-                    byteAtual = 0;
-                }
-            }
-            letra = fgetc(arquivo);
+            fprintf(arquivoCodificado, "%", byte[i]);
         }
-
-        rewind(arquivoCodificado);
-
-        if(bytesRestantes != 7)
-            fputc(bytesRestantes+1, arquivoCodificado);
-        else
-            fputc(0, arquivoCodificado);
     }
 
 
