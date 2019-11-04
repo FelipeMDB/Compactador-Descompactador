@@ -3,9 +3,10 @@
 	<stdio.h>
 	<stdlib.h>
 
-1572701396 source:c:\users\gabri\onedrive\documentos\github\compactador-descompactador\compactador\main.c
+1572908568 source:c:\users\gabri\onedrive\documentos\github\compactador-descompactador\compactador\main.c
 	<stdio.h>
 	<stdlib.h>
+	"compactador.h"
 
 1572371044 source:c:\users\gabri\onedrive\documentos\github\compactador-descompactador\compactador\compactador.c
 
@@ -16,4 +17,9 @@
 1572887382 source:f:\compactador-descompactador\compactador\main.c
 	<stdio.h>
 	<stdlib.h>
+
+1572907774 c:\users\gabri\onedrive\documentos\github\compactador-descompactador\compactador\compactador.h
+	"estruturas.h"
+
+1572907736 c:\users\gabri\onedrive\documentos\github\compactador-descompactador\compactador\estruturas.h
 
