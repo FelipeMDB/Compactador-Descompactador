@@ -18,7 +18,7 @@ typedef struct NoFila
 
 typedef struct
 {
-    char codigo[8];
+    char *codigo;
     char qtosBits;
 }CodLetra;
 
@@ -95,8 +95,10 @@ void inserirNaFila(NoArvore *novoNo, NoFila *inicio)
 
 CodLetra codigosLetras[255];
 
-void codificarLetras(NoArvore* atual, char cod, char indice, char codigo[])
+void codificarLetras(NoArvore* atual, char cod, char indice, char *codigo)
 {
+    if(indice != 0)
+        codigo = (char*)realloc(codigo, (indice+1)*sizeof(char));
     codigo[indice] = cod;
     if(atual->temValor == 0)
     {
@@ -105,12 +107,13 @@ void codificarLetras(NoArvore* atual, char cod, char indice, char codigo[])
     }
     else
     {
-        int i;
+        char i;
+        codigosLetras[atual->letra].codigo = (char*)malloc((indice+1)*sizeof(char));
         for(i=0; i<=indice; i++)
             codigosLetras[atual->letra].codigo[i] = codigo[i];
         codigosLetras[atual->letra].qtosBits = indice+1;
 
-        printf("%c", atual->letra);
+        printf("%d", codigo[0]);
     }
 }
 

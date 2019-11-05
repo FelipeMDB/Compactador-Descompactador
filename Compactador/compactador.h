@@ -84,16 +84,16 @@ void compactar()
     {
         fputc(aux->dado->letra, arquivoCodificado);
         fwrite(&(aux->dado->quantidade), 4, 1, arquivoCodificado);
-        //fprintf(arquivoCodificado, "%d", aux->dado->quantidade);
         aux = aux->prox;
     }
 
     converterParaArvore(inicio);
 
     {
-        char codigo[8];
+        char *codigo = (char*)malloc(sizeof(char));
         codificarLetras(inicio->dado->esq, 0, 0, codigo);
         codificarLetras(inicio->dado->dir, 1, 0, codigo);
+        free(codigo);
     }
 
     rewind(arquivo);

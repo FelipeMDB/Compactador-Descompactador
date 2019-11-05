@@ -5,10 +5,11 @@
 	"compactador.h"
 	"descompactador.h"
 
-1572908568 source:c:\users\gabri\onedrive\documentos\github\compactador-descompactador\compactador\main.c
+1572993904 source:c:\users\gabri\onedrive\documentos\github\compactador-descompactador\compactador\main.c
 	<stdio.h>
 	<stdlib.h>
 	"compactador.h"
+	"descompactador.h"
 
 1572371044 source:c:\users\gabri\onedrive\documentos\github\compactador-descompactador\compactador\compactador.c
 
@@ -20,10 +21,10 @@
 	<stdio.h>
 	<stdlib.h>
 
-1572907774 c:\users\gabri\onedrive\documentos\github\compactador-descompactador\compactador\compactador.h
+1572994758 c:\users\gabri\onedrive\documentos\github\compactador-descompactador\compactador\compactador.h
 	"estruturas.h"
 
-1572907736 c:\users\gabri\onedrive\documentos\github\compactador-descompactador\compactador\estruturas.h
+1572994664 c:\users\gabri\onedrive\documentos\github\compactador-descompactador\compactador\estruturas.h
 
 1572968971 c:\users\u18200\documents\github\compactador-descompactador\compactador\compactador.h
 	"estruturas.h"
@@ -31,5 +32,8 @@
 1572968827 c:\users\u18200\documents\github\compactador-descompactador\compactador\estruturas.h
 
 1572968163 c:\users\u18200\documents\github\compactador-descompactador\compactador\descompactador.h
+	"estruturas.h"
+
+1572993904 c:\users\gabri\onedrive\documentos\github\compactador-descompactador\compactador\descompactador.h
 	"estruturas.h"
 
