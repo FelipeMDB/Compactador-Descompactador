@@ -83,6 +83,7 @@ void descompactar()
             if(aux->temValor == 1)
             {
                 fputc(aux->letra, arquivoDecodificado);
+                printf("\n%c",aux->letra);
                 aux = inicio->dado;
             }
             byteAtual++;
@@ -109,6 +110,7 @@ void descompactar()
                 fputc(aux->letra, arquivoDecodificado);
                 aux = inicio->dado;
             }
+            byteAtual++;
         }
 
         fclose(arquivoDecodificado);
