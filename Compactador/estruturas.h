@@ -1,3 +1,5 @@
+#ifndef ESTRUTURAS
+#define ESTRUTURAS
 typedef struct NoArvore
 {
     char temValor;
@@ -19,6 +21,7 @@ typedef struct
     char codigo[8];
     char qtosBits;
 }CodLetra;
+
 
 NoArvore* juntarNos(NoArvore *noUm, NoArvore *noDois)
 {
@@ -108,3 +111,35 @@ void codificarLetras(NoArvore* atual, char cod, char indice, char codigo[])
         codigosLetras[atual->letra].qtosBits = indice+1;
     }
 }
+
+
+
+void converterParaArvore(NoFila *inicio)
+{
+    /*convertendo a fila em árvore*/
+
+    while(inicio->prox!= NULL)
+    {
+        if(inicio->prox->prox == NULL)
+        {
+            NoFila *dir = (NoFila*)malloc(sizeof(NoFila));
+            NoFila *esq = desenfileirar(inicio);
+            *dir = *inicio;
+            dir->dado = (NoArvore*)malloc(sizeof(NoArvore));
+            *(dir->dado) = *(inicio->dado);
+            inicio->dado->temValor = 0;
+            inicio->dado->quantidade  = (dir->dado->quantidade) + (esq->dado->quantidade);
+            inicio->dado->esq = esq->dado;
+            inicio->dado->dir = dir->dado;
+            inicio->prox = NULL;
+        }
+        else
+        {
+            NoFila *esq = desenfileirar(inicio);
+            NoFila *dir = desenfileirar(inicio);
+            inserirNaFila(juntarNos(esq->dado, dir->dado), inicio);
+        }
+    }
+}
+
+#endif

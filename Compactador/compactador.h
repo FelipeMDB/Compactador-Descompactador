@@ -1,5 +1,6 @@
+#ifndef COMPACTADOR
+#define COMPACTADOR
 #include "estruturas.h"
-
 void compactar()
 {
     /*Leitura de arquivo*/
@@ -86,30 +87,7 @@ void compactar()
         aux = aux->prox;
     }
 
-    /*convertendo a fila em árvore*/
-
-    while(inicio->prox!= NULL)
-    {
-        if(inicio->prox->prox == NULL)
-        {
-            NoFila *dir = (NoFila*)malloc(sizeof(NoFila));
-            NoFila *esq = desenfileirar(inicio);
-            *dir = *inicio;
-            dir->dado = (NoArvore*)malloc(sizeof(NoArvore));
-            *(dir->dado) = *(inicio->dado);
-            inicio->dado->temValor = 0;
-            inicio->dado->quantidade  = (dir->dado->quantidade) + (esq->dado->quantidade);
-            inicio->dado->esq = esq->dado;
-            inicio->dado->dir = dir->dado;
-            inicio->prox = NULL;
-        }
-        else
-        {
-            NoFila *esq = desenfileirar(inicio);
-            NoFila *dir = desenfileirar(inicio);
-            inserirNaFila(juntarNos(esq->dado, dir->dado), inicio);
-        }
-    }
+    converterParaArvore(inicio);
 
     {
         char codigo[8];
@@ -144,11 +122,13 @@ void compactar()
             }
             letra = fgetc(arquivo);
         }
+        if( bytesRestantes!= 7)
+            fputc(byteAtual, arquivoCodificado);
 
         rewind(arquivoCodificado);
 
         if(bytesRestantes != 7)
-            fputc(bytesRestantes+1, arquivoCodificado);
+            fputc(bytesRestantes, arquivoCodificado);
         else
             fputc(0, arquivoCodificado);
     }
@@ -157,3 +137,5 @@ void compactar()
     fclose(arquivo);
     fclose(arquivoCodificado);
 }
+
+#endif
