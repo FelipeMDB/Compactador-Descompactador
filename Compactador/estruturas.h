@@ -109,6 +109,8 @@ void codificarLetras(NoArvore* atual, char cod, char indice, char codigo[])
         for(i=0; i<=indice; i++)
             codigosLetras[atual->letra].codigo[i] = codigo[i];
         codigosLetras[atual->letra].qtosBits = indice+1;
+
+        printf("%c", atual->letra);
     }
 }
 
@@ -139,6 +141,18 @@ void converterParaArvore(NoFila *inicio)
             NoFila *dir = desenfileirar(inicio);
             inserirNaFila(juntarNos(esq->dado, dir->dado), inicio);
         }
+    }
+}
+
+void limparArvore(NoArvore *atual)
+{
+    if(atual != NULL)
+    {
+        NoArvore *esq = atual->esq;
+        NoArvore *dir = atual->dir;
+        free(atual);
+        limparArvore(esq);
+        limparArvore(dir);
     }
 }
 

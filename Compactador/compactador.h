@@ -10,7 +10,7 @@ void compactar()
     char nomeNovoArquivo[25];
     NoFila *inicio;
     NoFila *aux;
-    int i;
+    unsigned char i;
     /*criação da fila de priorjdades*/
     inicio = (NoFila*)malloc(sizeof(NoFila));
     inicio->dado = NULL;
@@ -18,7 +18,7 @@ void compactar()
     char quantidadeLetrasDiferentes = 0;
 
     {
-        char letra;
+        unsigned char letra;
         int quantidade[255];
 
         printf("Digite o nome do arquivo\n");
@@ -35,11 +35,11 @@ void compactar()
         for(i = 0; i < 255; i++)
             quantidade[i] = 0;
 
-        letra = fgetc(arquivo);
-        while (letra != EOF)
+        letra = (unsigned char) fgetc(arquivo);
+        while (!(feof(arquivo)))
         {
             quantidade[letra] = quantidade[letra] + 1;
-            letra = fgetc(arquivo);
+            letra = (unsigned char)fgetc(arquivo);
         }
 
         /*armazenamento das letras e suas respectivas quantidades na fila de prioridades*/
@@ -83,7 +83,8 @@ void compactar()
     while(aux != NULL)
     {
         fputc(aux->dado->letra, arquivoCodificado);
-        fprintf(arquivoCodificado, "%d",aux->dado->quantidade);
+        fwrite(&(aux->dado->quantidade), 4, 1, arquivoCodificado);
+        //fprintf(arquivoCodificado, "%d", aux->dado->quantidade);
         aux = aux->prox;
     }
 
@@ -105,8 +106,8 @@ void compactar()
     {
         char bytesRestantes = 7;
         char byteAtual = 0;
-        char letra = fgetc(arquivo);
-        while(letra != EOF)
+        unsigned char letra = fgetc(arquivo);
+        while(!(feof(arquivo)))
         {
             for(i = 0; i < codigosLetras[letra].qtosBits; i++)
             {
@@ -133,9 +134,11 @@ void compactar()
             fputc(0, arquivoCodificado);
     }
 
-
     fclose(arquivo);
     fclose(arquivoCodificado);
+
+    limparArvore(inicio->dado);
+    free(inicio);
 }
 
 #endif

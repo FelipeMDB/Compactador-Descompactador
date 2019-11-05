@@ -22,7 +22,6 @@ void descompactar()
         scanf("%s", nomeArquivo);
         arquivo = fopen(nomeArquivo, "rb");
 
-
         if(arquivo == NULL)
         {
             printf("Não foi possivel abrir o arquivo, este provavelmente não existe\n");
@@ -38,9 +37,9 @@ void descompactar()
 
         for(i = 0; i<quantidadeLetrasDiferentes; i++)
         {
-            char letra = fgetc(arquivo);
+            unsigned char letra = fgetc(arquivo);
             int qtd = 0;
-            fscanf(arquivo, "%d", &qtd);
+            fread(&qtd, sizeof(int), 1, arquivo);
             NoArvore *novoNo = (NoArvore*) malloc(sizeof(NoArvore));
             novoNo->letra = letra;
             novoNo->esq = NULL;
@@ -61,8 +60,6 @@ void descompactar()
                 atual = atual->prox;
             }
 
-            /*inserirNaFila(novoNo, inicio);*/
-
         }
         converterParaArvore(inicio);
 
@@ -71,7 +68,7 @@ void descompactar()
         aux = inicio->dado;
         char byte  = fgetc(arquivo);
         char proximoByte = fgetc(arquivo);
-        while(proximoByte != EOF)
+        while(!(feof(arquivo)))
         {
             char cod = (byte << byteAtual);
             cod = cod >> 7;
@@ -115,6 +112,9 @@ void descompactar()
 
         fclose(arquivoDecodificado);
         fclose(arquivo);
+
+        limparArvore(inicio->dado);
+        free(inicio);
     }
 }
 
