@@ -11,7 +11,7 @@ void compactar()
     NoFila *inicio;
     NoFila *aux;
     unsigned char i;
-    /*criação da fila de priorjdades*/
+    /*criaï¿½ï¿½o da fila de priorjdades*/
     inicio = (NoFila*)malloc(sizeof(NoFila));
     inicio->dado = NULL;
     inicio->prox = NULL;
@@ -27,7 +27,7 @@ void compactar()
 
         if(arquivo == NULL)
         {
-            printf("Não foi possivel abrir o arquivo\n");
+            printf("Nï¿½o foi possivel abrir o arquivo\n");
             exit(0);
         }
 
@@ -84,7 +84,6 @@ void compactar()
     {
         fputc(aux->dado->letra, arquivoCodificado);
         fwrite(&(aux->dado->quantidade), 4, 1, arquivoCodificado);
-        //fprintf(arquivoCodificado, "%d", aux->dado->quantidade);
         aux = aux->prox;
     }
 
@@ -92,8 +91,10 @@ void compactar()
 
     {
         char codigo[256];
+        char *codigo = (char*)malloc(sizeof(char));
         codificarLetras(inicio->dado->esq, 0, 0, codigo);
         codificarLetras(inicio->dado->dir, 1, 0, codigo);
+        free(codigo);
     }
 
     rewind(arquivo);

@@ -18,7 +18,7 @@ typedef struct NoFila
 
 typedef struct
 {
-    char codigo[256];
+    char *codigo;
     char qtosBits;
 }CodLetra;
 
@@ -58,8 +58,8 @@ void inserirNaFila(NoArvore *novoNo, NoFila *inicio)
     {
         if((inicio->dado)->quantidade >= (novoNoFila->dado)->quantidade)
         {
-            NoFila noAuxiliar = *inicio;                    /*um nó fila recebe o conteúdo do ponteiro inicio*/
-            *inicio = *novoNoFila;                          /*o conteudo do inicio passa a ser o que é novoNoFila*/
+            NoFila noAuxiliar = *inicio;                    /*um nï¿½ fila recebe o conteï¿½do do ponteiro inicio*/
+            *inicio = *novoNoFila;                          /*o conteudo do inicio passa a ser o que ï¿½ novoNoFila*/
             inicio->prox = (NoFila*)malloc(sizeof(NoFila));  /*o prox de inicio recebe um malloc*/
             *(inicio->prox) = noAuxiliar;                      /*o conteudo do prox de inicio recebe o noAuxiliar*/
         }
@@ -74,7 +74,7 @@ void inserirNaFila(NoArvore *novoNo, NoFila *inicio)
                     if(noAtual->prox == NULL)
                     {
                         achou = 1;
-                        noAtual->prox = novoNoFila;                     /*Conteúdo do ponteiro passa a ser o novo nó fila*/
+                        noAtual->prox = novoNoFila;                     /*Conteï¿½do do ponteiro passa a ser o novo nï¿½ fila*/
                     }
                     else if(((noAtual->prox)->dado)->quantidade > (novoNoFila->dado)->quantidade)
                     {
@@ -95,8 +95,10 @@ void inserirNaFila(NoArvore *novoNo, NoFila *inicio)
 
 CodLetra codigosLetras[255];
 
-void codificarLetras(NoArvore* atual, char cod, char indice, char codigo[])
+void codificarLetras(NoArvore* atual, char cod, char indice, char *codigo)
 {
+    if(indice != 0)
+        codigo = (char*)realloc(codigo, (indice+1)*sizeof(char));
     codigo[indice] = cod;
     if(atual->temValor == 0)
     {
@@ -105,12 +107,13 @@ void codificarLetras(NoArvore* atual, char cod, char indice, char codigo[])
     }
     else
     {
-        int i;
+        char i;
+        codigosLetras[atual->letra].codigo = (char*)malloc((indice+1)*sizeof(char));
         for(i=0; i<=indice; i++)
             codigosLetras[atual->letra].codigo[i] = codigo[i];
         codigosLetras[atual->letra].qtosBits = indice+1;
 
-        printf("%c", atual->letra);
+        printf("%d", codigo[0]);
     }
 }
 
@@ -118,7 +121,7 @@ void codificarLetras(NoArvore* atual, char cod, char indice, char codigo[])
 
 void converterParaArvore(NoFila *inicio)
 {
-    /*convertendo a fila em árvore*/
+    /*convertendo a fila em ï¿½rvore*/
 
     while(inicio->prox!= NULL)
     {
