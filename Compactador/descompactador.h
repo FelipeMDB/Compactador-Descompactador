@@ -14,7 +14,7 @@ void descompactar()
     NoFila *atual;
     NoArvore *aux;
     int i;
-    char quantidadeLetrasDiferentes = 0;
+    unsigned char quantidadeLetrasDiferentes = 0;
     char qtdLixo = 0;
 
     {
@@ -35,7 +35,7 @@ void descompactar()
         qtdLixo = fgetc(arquivo);
         quantidadeLetrasDiferentes = fgetc(arquivo);
 
-        for(i = 0; i<quantidadeLetrasDiferentes; i++)
+        for(i = 0; i<=quantidadeLetrasDiferentes; i++)
         {
             unsigned char letra = fgetc(arquivo);
             int qtd = 0;

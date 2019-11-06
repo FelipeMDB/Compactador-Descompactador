@@ -77,7 +77,7 @@ void compactar()
     scanf("%s", &nomeNovoArquivo);
     arquivoCodificado = fopen(nomeNovoArquivo, "wb");
     fputc(' ', arquivoCodificado);
-    fputc(quantidadeLetrasDiferentes, arquivoCodificado);
+    fputc(quantidadeLetrasDiferentes-1, arquivoCodificado);
 
     aux = inicio;
     while(aux != NULL)
@@ -91,7 +91,7 @@ void compactar()
     converterParaArvore(inicio);
 
     {
-        char codigo[8];
+        char codigo[256];
         codificarLetras(inicio->dado->esq, 0, 0, codigo);
         codificarLetras(inicio->dado->dir, 1, 0, codigo);
     }

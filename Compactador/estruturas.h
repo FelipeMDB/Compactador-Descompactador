@@ -18,7 +18,7 @@ typedef struct NoFila
 
 typedef struct
 {
-    char codigo[8];
+    char codigo[256];
     char qtosBits;
 }CodLetra;
 
