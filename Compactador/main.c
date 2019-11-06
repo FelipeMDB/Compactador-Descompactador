@@ -8,6 +8,7 @@ int main()
 
     for(;;)
     {
+        system("cls");
         char i=0;
         printf("Escolha entre o menu de opções abaixo:\n1- Compactar Arquivo\n2- Descompactar Arquivo\n3- Sair\n");
         scanf("%d", &i);

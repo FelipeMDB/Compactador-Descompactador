@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1572955959 source:c:\users\u18200\documents\github\compactador-descompactador\compactador\main.c
+1573047408 source:c:\users\u18200\documents\github\compactador-descompactador\compactador\main.c
 	<stdio.h>
 	<stdlib.h>
 	"compactador.h"
@@ -26,12 +26,12 @@
 
 1572994664 c:\users\gabri\onedrive\documentos\github\compactador-descompactador\compactador\estruturas.h
 
-1573041878 c:\users\u18200\documents\github\compactador-descompactador\compactador\compactador.h
+1573047597 c:\users\u18200\documents\github\compactador-descompactador\compactador\compactador.h
 	"estruturas.h"
 
-1573041251 c:\users\u18200\documents\github\compactador-descompactador\compactador\estruturas.h
+1573043218 c:\users\u18200\documents\github\compactador-descompactador\compactador\estruturas.h
 
-1573041894 c:\users\u18200\documents\github\compactador-descompactador\compactador\descompactador.h
+1573047248 c:\users\u18200\documents\github\compactador-descompactador\compactador\descompactador.h
 	"estruturas.h"
 
 1572993904 c:\users\gabri\onedrive\documentos\github\compactador-descompactador\compactador\descompactador.h

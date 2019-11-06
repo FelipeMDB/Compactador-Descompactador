@@ -17,18 +17,18 @@ void descompactar()
     unsigned char quantidadeLetrasDiferentes = 0;
     char qtdLixo = 0;
 
+
+    printf("\nDigite o nome do arquivo: ");
+    scanf("%s", nomeArquivo);
+    arquivo = fopen(nomeArquivo, "rb");
+
+    if(arquivo == NULL)
     {
-        printf("Digite o nome do arquivo\n");
-        scanf("%s", nomeArquivo);
-        arquivo = fopen(nomeArquivo, "rb");
-
-        if(arquivo == NULL)
-        {
-            printf("Não foi possivel abrir o arquivo, este provavelmente não existe\n");
-            exit(0);
-        }
-
-        printf("\nDigite o nome do NOVO arquivo:");
+        printf("Não foi possivel abrir o arquivo, este provavelmente não existe\n");
+    }
+    else
+    {
+        printf("\nDigite o nome do NOVO arquivo: ");
         scanf("%s", nomeNovoArquivo);
         arquivoDecodificado = fopen(nomeNovoArquivo, "wb");
 
@@ -80,7 +80,7 @@ void descompactar()
             if(aux->temValor == 1)
             {
                 fputc(aux->letra, arquivoDecodificado);
-                printf("\n%c",aux->letra);
+                /*printf("\n%c",aux->letra);*/
                 aux = inicio->dado;
             }
             byteAtual++;
