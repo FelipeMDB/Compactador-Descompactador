@@ -1,5 +1,6 @@
 #ifndef ESTRUTURAS
 #define ESTRUTURAS
+
 typedef struct NoArvore
 {
     char temValor;
@@ -22,7 +23,7 @@ typedef struct
     char qtosBits;
 }CodLetra;
 
-
+/*a partir de dois nós, faz uma raiz com o primeiro na esquerda e o segundo na direita*/
 NoArvore* juntarNos(NoArvore *noUm, NoArvore *noDois)
 {
     NoArvore *raiz = (NoArvore*)malloc(sizeof(NoArvore));
@@ -34,6 +35,7 @@ NoArvore* juntarNos(NoArvore *noUm, NoArvore *noDois)
     return raiz;
 }
 
+/*tira o primeiro elemento da fila*/
 NoFila* desenfileirar(NoFila *inicio)
 {
     NoFila *noAuxiliar = (NoFila*)malloc(sizeof(NoFila));
@@ -43,6 +45,7 @@ NoFila* desenfileirar(NoFila *inicio)
     return noAuxiliar;
 }
 
+/*insere um elemento na fila sempre antes do que é maior que ele, e caso não houver, no fim*/
 void inserirNaFila(NoArvore *novoNo, NoFila *inicio)
 {
     NoFila *novoNoFila;
@@ -92,9 +95,10 @@ void inserirNaFila(NoArvore *novoNo, NoFila *inicio)
     }
 }
 
-
+/*vetor de códigos das letras*/
 CodLetra codigosLetras[256];
 
+/*percorre arvore recursivamente para formar os códigos das letras*/
 void codificarLetras(NoArvore* atual, char cod, char indice, char codigo[])
 {
     codigo[indice] = cod;
@@ -114,11 +118,9 @@ void codificarLetras(NoArvore* atual, char cod, char indice, char codigo[])
 }
 
 
-
+/*converte a fila de prioridades numa arvore*/
 void converterParaArvore(NoFila *inicio)
 {
-    /*convertendo a fila em �rvore*/
-
     while(inicio->prox!= NULL)
     {
         if(inicio->prox->prox == NULL)
@@ -143,6 +145,7 @@ void converterParaArvore(NoFila *inicio)
     }
 }
 
+/*desaloca todos os ponteiros da arvore*/
 void limparArvore(NoArvore *atual)
 {
     if(atual != NULL)

@@ -8,32 +8,37 @@ void compactar()
     char nomeArquivo[25];
     FILE *arquivoCodificado;
     char nomeNovoArquivo[25];
-    NoFila *inicio;
-    NoFila *aux;
-    int i;
+
+
     /*criacao da fila de priorjdades*/
+    NoFila *inicio;
     inicio = (NoFila*)malloc(sizeof(NoFila));
     inicio->dado = NULL;
     inicio->prox = NULL;
+
+    /*variáveis para auxiliar durante o processo*/
+    NoFila *aux;
+    int i;
     int quantidadeLetrasDiferentes = 0;
-
-
     unsigned char letra;
     int quantidade[256];
 
+    /*pergunta-se o arquivo que se deseja compactar*/
     printf("\nDigite o nome do arquivo: ");
     scanf("%s", nomeArquivo);
     arquivo = fopen(nomeArquivo, "rb");
 
-    if(arquivo == NULL)
+    /*Não é possível compactar um arquivo inexistente ou vazio*/
+    if(arquivo == NULL || feof(arquivo))
     {
         printf("Nao foi possivel abrir o arquivo\n");
     }
     else
     {
         for(i = 0; i < 256; i++)
-        quantidade[i] = 0;
+            quantidade[i] = 0;
 
+        /*Leitura do arquivo para contagem de letras*/
         letra = (unsigned char) fgetc(arquivo);
         while (!(feof(arquivo)))
         {
@@ -75,16 +80,20 @@ void compactar()
             aux = aux->prox;
         }
 
+        /*Converte-se a fila de prioridades para a arvore*/
         converterParaArvore(inicio);
 
+        /*codificação das letras a partir da arvore, guardando-as num vetor de 256 posicoes (para indexá-lo da letra)*/
         {
             char codigo[256];
             codificarLetras(inicio->dado->esq, 0, 0, codigo);
             codificarLetras(inicio->dado->dir, 1, 0, codigo);
         }
 
+        /*volta para ler o arquivo que será compactado do começo novamente*/
         rewind(arquivo);
 
+        /*a cada letra lida, vai formando-se bytes através de operações de bits para escrevê-los no novo arquivo*/
         {
             char bytesRestantes = 7;
             char byteAtual = 0;
@@ -116,9 +125,11 @@ void compactar()
                 fputc(0, arquivoCodificado);
         }
 
+        /*fecha os arquivos de leitura*/
         fclose(arquivo);
         fclose(arquivoCodificado);
 
+        /*free em todos os ponteiros que foram alocados*/
         limparArvore(inicio->dado);
         free(inicio);
 

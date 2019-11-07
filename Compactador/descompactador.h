@@ -10,19 +10,25 @@ void descompactar()
     char nomeArquivo[25];
     FILE *arquivoDecodificado;
     char nomeNovoArquivo[25];
+
+    /*fila de prioridades*/
     NoFila *inicio;
     NoFila *atual;
     NoArvore *aux;
+
+    /*variáveis para auxiliar processos*/
     int i;
     unsigned char quantidadeLetrasDiferentes = 0;
     char qtdLixo = 0;
 
 
+    /*pede-se nomes do arquivo compactado e para o novo arquivo descompactado*/
     printf("\nDigite o nome do arquivo: ");
     scanf("%s", nomeArquivo);
     arquivo = fopen(nomeArquivo, "rb");
 
-    if(arquivo == NULL)
+    /*Não há como descompactar um arquivo inexistente ou vazio*/
+    if(arquivo == NULL || feof(arquivo))
     {
         printf("Não foi possivel abrir o arquivo, este provavelmente não existe\n");
     }
@@ -32,9 +38,11 @@ void descompactar()
         scanf("%s", nomeNovoArquivo);
         arquivoDecodificado = fopen(nomeNovoArquivo, "wb");
 
+        /*guarda quantos bits foram lixo e quantos elementos há na fila de prioridades*/
         qtdLixo = fgetc(arquivo);
         quantidadeLetrasDiferentes = fgetc(arquivo);
 
+        /*lê formando fila de prioridades*/
         for(i = 0; i<=quantidadeLetrasDiferentes; i++)
         {
             unsigned char letra = fgetc(arquivo);
@@ -61,58 +69,65 @@ void descompactar()
             }
 
         }
+
+        /*converte fila para arvore*/
         converterParaArvore(inicio);
 
-
-        char byteAtual = 0;
-        aux = inicio->dado;
-        char byte  = fgetc(arquivo);
-        char proximoByte = fgetc(arquivo);
-        while(!(feof(arquivo)))
         {
-            char cod = (byte << byteAtual);
-            cod = cod >> 7;
-            if(cod == 0)
-                aux = aux->esq;
-            else
-                aux = aux->dir;
+            /*percorre por bits a arvore para recuperar letras*/
+            char byteAtual = 0;
+            aux = inicio->dado;
+            char byte  = fgetc(arquivo);
+            char proximoByte = fgetc(arquivo);
+            while(!(feof(arquivo)))
+            {
+                char cod = (byte << byteAtual);
+                cod = cod >> 7;
+                if(cod == 0)
+                    aux = aux->esq;
+                else
+                    aux = aux->dir;
 
-            if(aux->temValor == 1)
-            {
-                fputc(aux->letra, arquivoDecodificado);
-                /*printf("\n%c",aux->letra);*/
-                aux = inicio->dado;
+                if(aux->temValor == 1)
+                {
+                    fputc(aux->letra, arquivoDecodificado);
+                    /*printf("\n%c",aux->letra);*/
+                    aux = inicio->dado;
+                }
+                byteAtual++;
+                if(byteAtual > 7)
+                {
+                    byteAtual = 0;
+                    byte = proximoByte;
+                    proximoByte = fgetc(arquivo);
+                }
             }
-            byteAtual++;
-            if(byteAtual > 7)
+
+            /*ultimo byte*/
+            for(i = 0; i<8-qtdLixo; i ++)
             {
-                byteAtual = 0;
-                byte = proximoByte;
-                proximoByte = fgetc(arquivo);
+                char cod = (byte << byteAtual);
+                cod = cod >> 7;
+                if(cod == 0)
+                    aux = aux->esq;
+                else
+                    aux = aux->dir;
+
+                if(aux->temValor == 1)
+                {
+                    fputc(aux->letra, arquivoDecodificado);
+                    aux = inicio->dado;
+                }
+                byteAtual++;
             }
         }
 
-        /*ultimo byte*/
-        for(i = 0; i<8-qtdLixo; i ++)
-        {
-            char cod = (byte << byteAtual);
-            cod = cod >> 7;
-            if(cod == 0)
-                aux = aux->esq;
-            else
-                aux = aux->dir;
 
-            if(aux->temValor == 1)
-            {
-                fputc(aux->letra, arquivoDecodificado);
-                aux = inicio->dado;
-            }
-            byteAtual++;
-        }
-
+        /*fecha arquivos utilizados*/
         fclose(arquivoDecodificado);
         fclose(arquivo);
 
+        /*desaloca ponteiros*/
         limparArvore(inicio->dado);
         free(inicio);
     }
