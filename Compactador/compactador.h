@@ -5,9 +5,9 @@ void compactar()
 {
     /*Leitura de arquivo*/
     FILE *arquivo;
-    char nomeArquivo[25];
+    char nomeArquivo[231];
     FILE *arquivoCodificado;
-    char nomeNovoArquivo[25];
+    char nomeNovoArquivo[231];
 
 
     /*criacao da fila de priorjdades*/

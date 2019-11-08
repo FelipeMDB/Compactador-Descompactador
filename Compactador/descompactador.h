@@ -7,9 +7,9 @@ void descompactar()
 {
     /*Leitura de arquivo*/
     FILE *arquivo;
-    char nomeArquivo[25];
+    char nomeArquivo[231];
     FILE *arquivoDecodificado;
-    char nomeNovoArquivo[25];
+    char nomeNovoArquivo[231];
 
     /*fila de prioridades*/
     NoFila *inicio;
