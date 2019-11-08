@@ -8,17 +8,16 @@ int main()
 
     for(;;)
     {
-        system("cls");
         char i=0;
-        printf("Escolha entre o menu de opções abaixo:\n1- Compactar Arquivo\n2- Descompactar Arquivo\n3- Sair\n");
+        printf("\nEscolha entre o menu de opcoes abaixo:\n1- Compactar Arquivo\n2- Descompactar Arquivo\n3- Limpar Tela\n4- Sair\n");
         scanf("%d", &i);
-        if(i==1)
+        if(i == 1)
             compactar();
         else if(i == 2)
-        {
             descompactar();
-        }
-        else
+        else if(i == 3)
+            system("cls");
+        else if(i == 4)
             return 0;
     }
 

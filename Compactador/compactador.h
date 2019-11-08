@@ -31,7 +31,7 @@ void compactar()
     /*Não é possível compactar um arquivo inexistente ou vazio*/
     if(arquivo == NULL || feof(arquivo))
     {
-        printf("Nao foi possivel abrir o arquivo\n");
+        printf("\nNao foi possivel abrir o arquivo ou este arquivo nao existe\n");
     }
     else
     {
@@ -40,101 +40,111 @@ void compactar()
 
         /*Leitura do arquivo para contagem de letras*/
         letra = (unsigned char) fgetc(arquivo);
-        while (!(feof(arquivo)))
+        if(feof(arquivo))
         {
-            quantidade[letra] = quantidade[letra] + 1;
-            letra = (unsigned char)fgetc(arquivo);
+            printf("\nEste arquivo esta vazio e nao pode ser compactado\n\n");
         }
-
-        /*armazenamento das letras e suas respectivas quantidades na fila de prioridades*/
-        for(i = 0; i < 256; i++)
+        else
         {
-            if(quantidade[i] != 0)
+            while (!(feof(arquivo)))
             {
-                NoArvore *novoNo;
-                novoNo = (NoArvore*)malloc(sizeof(NoArvore));
-
-                novoNo->letra = i;
-
-                novoNo->quantidade = quantidade[i];
-                novoNo->temValor = 1;
-                novoNo->esq = NULL;
-                novoNo->dir = NULL;
-                inserirNaFila(novoNo, inicio);
-                quantidadeLetrasDiferentes++;
+                quantidade[letra] = quantidade[letra] + 1;
+                letra = (unsigned char)fgetc(arquivo);
             }
-        }
 
-        /*Escrevendo fila de prioridades no arquivo codificado*/
-        printf("\nDigite o nome do novo arquivo: ");
-        scanf("%s", &nomeNovoArquivo);
-        arquivoCodificado = fopen(nomeNovoArquivo, "wb");
-        fputc(' ', arquivoCodificado);
-        fputc((unsigned char)(quantidadeLetrasDiferentes-1), arquivoCodificado);
-
-        aux = inicio;
-        while(aux != NULL)
-        {
-            fputc(aux->dado->letra, arquivoCodificado);
-            fwrite(&(aux->dado->quantidade), 4, 1, arquivoCodificado);
-            aux = aux->prox;
-        }
-
-        /*Converte-se a fila de prioridades para a arvore*/
-        converterParaArvore(inicio);
-
-        /*codificação das letras a partir da arvore, guardando-as num vetor de 256 posicoes (para indexá-lo da letra)*/
-        {
-            char codigo[256];
-            codificarLetras(inicio->dado->esq, 0, 0, codigo);
-            codificarLetras(inicio->dado->dir, 1, 0, codigo);
-        }
-
-        /*volta para ler o arquivo que será compactado do começo novamente*/
-        rewind(arquivo);
-
-        /*a cada letra lida, vai formando-se bytes através de operações de bits para escrevê-los no novo arquivo*/
-        {
-            char bytesRestantes = 7;
-            char byteAtual = 0;
-            unsigned char letra = fgetc(arquivo);
-            while(!(feof(arquivo)))
+            /*armazenamento das letras e suas respectivas quantidades na fila de prioridades*/
+            for(i = 0; i < 256; i++)
             {
-                for(i = 0; i < codigosLetras[letra].qtosBits; i++)
+                if(quantidade[i] != 0)
                 {
-                    char cod = codigosLetras[letra].codigo[i] << bytesRestantes;
-                    byteAtual = byteAtual^cod;
-                    bytesRestantes--;
-                    if(bytesRestantes == -1)
-                    {
-                        bytesRestantes = 7;
-                        fputc(byteAtual, arquivoCodificado);
-                        byteAtual = 0;
-                    }
+                    NoArvore *novoNo;
+                    novoNo = (NoArvore*)malloc(sizeof(NoArvore));
+
+                    novoNo->letra = i;
+
+                    novoNo->quantidade = quantidade[i];
+                    novoNo->temValor = 1;
+                    novoNo->esq = NULL;
+                    novoNo->dir = NULL;
+                    inserirNaFila(novoNo, inicio);
+                    quantidadeLetrasDiferentes++;
                 }
-                letra = fgetc(arquivo);
             }
-            if( bytesRestantes!= 7)
-                fputc(byteAtual, arquivoCodificado);
 
-            rewind(arquivoCodificado);
+            /*Escrevendo fila de prioridades no arquivo codificado*/
+            printf("\nDigite o nome do novo arquivo: ");
+            scanf("%s", &nomeNovoArquivo);
+            strcat(nomeNovoArquivo, ".gf");
+            arquivoCodificado = fopen(nomeNovoArquivo, "wb");
+            fputc(' ', arquivoCodificado);
+            fputc((unsigned char)(quantidadeLetrasDiferentes-1), arquivoCodificado);
 
-            if(bytesRestantes != 7)
-                fputc(bytesRestantes, arquivoCodificado);
-            else
-                fputc(0, arquivoCodificado);
+            aux = inicio;
+            while(aux != NULL)
+            {
+                fputc(aux->dado->letra, arquivoCodificado);
+                fwrite(&(aux->dado->quantidade), 4, 1, arquivoCodificado);
+                aux = aux->prox;
+            }
+
+            /*Converte-se a fila de prioridades para a arvore*/
+            converterParaArvore(inicio);
+
+            /*codificação das letras a partir da arvore, guardando-as num vetor de 256 posicoes (para indexá-lo da letra)*/
+            {
+                char codigo[256];
+                codificarLetras(inicio->dado->esq, 0, 0, codigo);
+                codificarLetras(inicio->dado->dir, 1, 0, codigo);
+            }
+
+            /*volta para ler o arquivo que será compactado do começo novamente*/
+            rewind(arquivo);
+
+            /*a cada letra lida, vai formando-se bytes através de operações de bits para escrevê-los no novo arquivo*/
+            {
+                char bytesRestantes = 7;
+                char byteAtual = 0;
+                unsigned char letra = fgetc(arquivo);
+                while(!(feof(arquivo)))
+                {
+                    for(i = 0; i < codigosLetras[letra].qtosBits; i++)
+                    {
+                        char cod = codigosLetras[letra].codigo[i] << bytesRestantes;
+                        byteAtual = byteAtual^cod;
+                        bytesRestantes--;
+                        if(bytesRestantes == -1)
+                        {
+                            bytesRestantes = 7;
+                            fputc(byteAtual, arquivoCodificado);
+                            byteAtual = 0;
+                        }
+                    }
+                    letra = fgetc(arquivo);
+                }
+                if( bytesRestantes!= 7)
+                    fputc(byteAtual, arquivoCodificado);
+
+                rewind(arquivoCodificado);
+
+                if(bytesRestantes != 7)
+                    fputc(bytesRestantes, arquivoCodificado);
+                else
+                    fputc(0, arquivoCodificado);
+            }
+
+            /*fecha os arquivos de leitura*/
+            fclose(arquivo);
+            fclose(arquivoCodificado);
+
+            /*free em todos os ponteiros que foram alocados*/
+            limparArvore(inicio->dado);
+            free(inicio);
+
+            for(i=0; i<256; i++)
+                free(codigosLetras[i].codigo);
+
+            printf("\nARQUIVO COMPACTADO COM SUCESSO\n");
         }
-
-        /*fecha os arquivos de leitura*/
-        fclose(arquivo);
-        fclose(arquivoCodificado);
-
-        /*free em todos os ponteiros que foram alocados*/
-        limparArvore(inicio->dado);
-        free(inicio);
-
-        for(i=0; i<256; i++)
-            free(codigosLetras[i].codigo);
     }
 }
 
