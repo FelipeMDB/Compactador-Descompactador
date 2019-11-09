@@ -9,6 +9,7 @@ int main()
     for(;;)
     {
         char i=0;
+        printf("OI");
         printf("\nEscolha entre o menu de opcoes abaixo:\n1- Compactar Arquivo\n2- Descompactar Arquivo\n3- Limpar Tela\n4- Sair\n");
         scanf("%d", &i);
         if(i == 1)
