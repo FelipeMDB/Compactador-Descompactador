@@ -5,7 +5,7 @@ typedef struct NoArvore
 {
     char temValor;
     unsigned char letra;
-    int quantidade;
+    unsigned int quantidade;
     struct NoArvore *esq;
     struct NoArvore *dir;
 } NoArvore;

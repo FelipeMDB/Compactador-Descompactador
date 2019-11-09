@@ -52,7 +52,7 @@ void descompactar()
             for(i = 0; i<=quantidadeLetrasDiferentes; i++)
             {
                 unsigned char letra = fgetc(arquivo);
-                int qtd = 0;
+                unsigned int qtd = 0;
                 fread(&qtd, sizeof(int), 1, arquivo);
                 NoArvore *novoNo = (NoArvore*) malloc(sizeof(NoArvore));
                 novoNo->letra = letra;
